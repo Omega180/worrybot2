@@ -1,7 +1,7 @@
 // Clases necesarias de discord.js
 const fs = require("node:fs")
 const path = require("node:path")
-const {Client, Collection, Events, GatewayIntentBits} = require("discord.js")
+const {Client, Collection, GatewayIntentBits} = require("discord.js")
 const {token} = require("./config.json")
 
 // Crear una nueva instancia del cliente
@@ -30,40 +30,27 @@ for (const folder of commandFolders) {
 		}
 	}
 }
+// crea una variable que almacena el camino de la carpeta
+const eventsPath = path.join(__dirname, "events")
 
-// Cuando el cliente este listo, correr este codigo (solo una vez)
-// Usamos 'c' como parametro del evento para mantenerlo separado del ya definido "client"
+//ingresa al comino para leer los archivos dentro de la variable, filtra los archivos en base a el endsWith
+const eventFiles = fs
+	.readdirSync(eventsPath)
+	.filter((file) => file.endsWith(".js"))
 
-client.on(Events.InteractionCreate, async (interaction) => {
-	if (!interaction.isChatInputCommand()) return
-	const command = interaction.client.commands.get(interaction.commandName)
+//Ciclo que lee todas los eventos en base a sus argumentos y la variable ya adquirida anteriormente
 
-	if (!command) {
-		console.error(`no commands matching ${interaction.commandName} was found`)
-		return
+/* The Client class in discord.js extends the EventEmitter class. Therefore, the client object exposes the .on() and .once() methods that you can use to register event listeners. These methods take two arguments: the event name and a callback function. These are defined in your separate event files as name and execute. */
+
+for (const file of eventFiles) {
+	const filePath = path.join(eventsPath, file)
+	const event = require(filePath)
+	if (event.once) {
+		client.once(event.name, (...args) => event.execute(...args))
+	} else {
+		client.on(event.name, (...args) => event.execute(...args))
 	}
-
-	try {
-		await command.execute(interaction)
-	} catch (error) {
-		console.error(error)
-		if (interaction.replied || interaction.deferred) {
-			await interaction.followUp({
-				content: "there was an error while executing this command",
-				ephemeral: true,
-			})
-		} else {
-			await interaction.reply({
-				content: "there was an error while executing this command",
-				ephemeral: true,
-			})
-		}
-	}
-})
-
-client.once(Events.ClientReady, (c) => {
-	console.log(`Ready! Logged in as ${c.user.tag}`)
-})
+}
 
 // Entra al discord con el token del cliente
 
