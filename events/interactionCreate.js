@@ -27,7 +27,7 @@ module.exports = {
 			if (now < expirationTime) {
 				const expiredTimestamp = Math.round(expirationTime / 1000)
 				return interaction.reply({
-					content: `Please wait, you are on cooldown for ${command.data.name}. you can use it again in <t:${expiredTimestamp}:R>`,
+					content: `Porfavor espera, you are on cooldown for ${command.data.name}. you can use it again in <t:${expiredTimestamp}:R>`,
 					ephemeral: true,
 				})
 			}
