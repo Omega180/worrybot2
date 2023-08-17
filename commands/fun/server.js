@@ -9,6 +9,7 @@ module.exports = {
 	//Interaction aca abajo representa el ChatInputCommandInteraction en la documentacion
 	async execute(interaction) {
 		//interaction.build es el objeto que representa al servidor en el cual el comando fue corrido
+		// deferReply le permite al bot abrir una ventana de espera para realizar cualquier operacion que necesite durante 15 minutos
 		await interaction.deferReply()
 		await wait(2000)
 		/* Otra manera de buscar usuario seria esta, se le pasa el usuario a buscar y se ejecuta la funcion, luego esta es pasada en el reply en si */
