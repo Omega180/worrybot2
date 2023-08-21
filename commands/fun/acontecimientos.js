@@ -13,7 +13,7 @@ const listaAcontecimientos = [
 	"Pablo Expansion Pack 1: GFL ES y Tortuga arc",
 ]
 const d6 = () => {
-	return Math.floor(Math.random() * 9)
+	return Math.floor(Math.random() * listaAcontecimientos.length)
 }
 module.exports = {
 	data: new SlashCommandBuilder()

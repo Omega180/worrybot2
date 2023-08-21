@@ -1,6 +1,5 @@
 const {SlashCommandBuilder} = require("discord.js")
 const wait = require("node:timers/promises").setTimeout
-
 const d6 = () => {
 	return Math.floor(Math.random() * 6 + 1)
 }
